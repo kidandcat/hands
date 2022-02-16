@@ -11,9 +11,7 @@
   "dependencies": {
     "@mediapipe/camera_utils": "^0.3.1640029074",
     "@mediapipe/hands": "^0.4.1635986972",
-    "@nut-tree/nut-js": "^2.0.1",
     "electron-squirrel-startup": "^1.0.0",
-    "handsfree": "^8.5.1",
     "node-webcam": "^0.8.0",
     "robotjs": "^0.6.0"
   },

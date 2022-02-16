@@ -10,9 +10,7 @@ const createWindow = () => {
             backgroundThrottling: false
         }
     })
-
     ipcMain.on('fingers-data', fingersData)
-
     win.loadFile('index.html')
 }
 
@@ -27,16 +25,14 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
-// ROBOT.js
 
+// ROBOT.js
 const slowMoveMod = 0.5
 const slowMoveThreshold = 6
-const mouseBaseSpeed = 0.8 // the lower, the more precision
-const quickMoveMod = 4
+const mouseBaseSpeed = 0.8
+const quickMoveMod = 3
 const quickMoveThreshold = 25
-// it's way easier for us to move hand horizontally than vertically
-const heightModifier = 1.3
-
+const heightModifier = 1.3 // it's way easier for us to move hand horizontally than vertically
 const gesturesDelay = 300
 const scrollMultiplier = 2
 
@@ -60,12 +56,14 @@ function fingersData(event, data) {
         const finger2 = hand1[8]
         const finger3 = hand1[12]
         const finger4 = hand1[16]
-        // const finger5 = hand1[20]
+        const finger5 = hand1[20]
         // const finger1base = hand1[1]
         // const finger2base = hand1[5]
         // const finger3base = hand1[9]
         // const finger4base = hand1[13]
         // const finger5base = hand1[17]
+
+        if (finger5.x > finger1.x) return
 
         const [pinchedMouse, unpinchedMouse, statusMouse] = pinchedMousef(finger1, finger2)
         const [pinchedLeft, unpinchedLeft, statusLeft] = pinchedLeftf(finger1, finger3)
