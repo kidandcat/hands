@@ -63,6 +63,7 @@ function fingersData(event, data) {
         // const finger4base = hand1[13]
         // const finger5base = hand1[17]
 
+        if (!finger5 || !finger1) return
         if (finger5.x > finger1.x) return
 
         const [pinchedMouse, unpinchedMouse, statusMouse] = pinchedMousef(finger1, finger2)
