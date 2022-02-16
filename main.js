@@ -32,7 +32,7 @@ const slowMoveThreshold = 6
 const mouseBaseSpeed = 0.8
 const quickMoveMod = 3
 const quickMoveThreshold = 25
-const heightModifier = 1.3 // it's way easier for us to move hand horizontally than vertically
+const heightModifier = 1.5 // it is way easier for us to move hand horizontally than vertically
 const gesturesDelay = 300
 const scrollMultiplier = 2
 
