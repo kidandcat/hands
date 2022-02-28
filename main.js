@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, Notification } = require('electron')
 const robot = require('robotjs');
 const path = require('path');
 
@@ -43,11 +43,14 @@ let scrolling = false
 
 const pinchedMousef = pinchedFinger(0.03)
 const pinchedLeftf = pinchedFinger(0.03)
-const pinchedRightf = pinchedFinger(0.02)
+const pinchedRightf = pinchedFinger(0.03)
+const pinchedPinkyf = pinchedFinger(0.03)
 let timerLeft, timerRight
 let scrollBuffer = 0
 let moveBufferX = 0
 let moveBufferY = 0
+let paused = false
+let pausing = false
 
 function fingersData(event, data) {
     if (data.length > 0) {
@@ -63,11 +66,24 @@ function fingersData(event, data) {
         // const finger4base = hand1[13]
         // const finger5base = hand1[17]
 
-        if (!finger5 || !finger1) return
+        if (!finger5 || !finger1 || pausing) return
 
         const [pinchedMouse, unpinchedMouse, statusMouse] = pinchedMousef(finger1, finger2)
         const [pinchedLeft, unpinchedLeft, statusLeft] = pinchedLeftf(finger1, finger3)
         const [pinchedRight, unpinchedRight, statusRight] = pinchedRightf(finger1, finger4)
+        const [pinchedPinky, unpinchedPinky, statusPinky] = pinchedPinkyf(finger1, finger5)
+
+        if(statusMouse && statusLeft && statusRight && statusPinky){
+            paused = !paused
+            pausing = true
+            new Notification(paused ? "Paused" : "Resumed", { body: paused ? "Paused" : "Resumed" })
+            robot.mouseToggle('up', 'left')
+            robot.mouseToggle('up', 'right')
+            setTimeout(() => {
+                pausing = false
+            }, 1000);
+        }
+        if(paused) return
 
         if (pinchedMouse) {
             moveBufferX = width * (1 - finger1.x)
