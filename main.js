@@ -73,17 +73,18 @@ function fingersData(event, data) {
         const [pinchedRight, unpinchedRight, statusRight] = pinchedRightf(finger1, finger4)
         const [pinchedPinky, unpinchedPinky, statusPinky] = pinchedPinkyf(finger1, finger5)
 
-        if(statusMouse && statusLeft && statusRight && statusPinky){
+        if (statusMouse && statusLeft && statusRight && statusPinky) {
             paused = !paused
             pausing = true
-            new Notification(paused ? "Paused" : "Resumed", { body: paused ? "Paused" : "Resumed" })
+            if (paused) app.dock.setIcon("./hand_off.png")
+            else app.dock.setIcon("./hand.png")
             robot.mouseToggle('up', 'left')
             robot.mouseToggle('up', 'right')
             setTimeout(() => {
                 pausing = false
             }, 1000);
         }
-        if(paused) return
+        if (paused) return
 
         if (pinchedMouse) {
             moveBufferX = width * (1 - finger1.x)
