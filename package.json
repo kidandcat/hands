@@ -27,7 +27,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon": "hand"
+        "icon": "hand",
+        "extraResource": ["hand.png", "hand_off.png"]
       },
       "makers": [
         {

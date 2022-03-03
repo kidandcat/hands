@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, Notification } = require('electron')
-const robot = require('robotjs');
-const path = require('path');
+const robot = require('robotjs')
+const path = require('path')
 
 const createWindow = () => {
     const win = new BrowserWindow({
@@ -76,8 +76,8 @@ function fingersData(event, data) {
         if (statusMouse && statusLeft && statusRight && statusPinky) {
             paused = !paused
             pausing = true
-            if (paused) app.dock.setIcon("./hand_off.png")
-            else app.dock.setIcon("./hand.png")
+            if (paused) app.dock.setIcon(process.resourcesPath + "/hand_off.png")
+            else app.dock.setIcon(process.resourcesPath + "/hand.png")
             robot.mouseToggle('up', 'left')
             robot.mouseToggle('up', 'right')
             setTimeout(() => {
