@@ -13,7 +13,8 @@
     "@mediapipe/hands": "^0.4.1635986972",
     "electron-squirrel-startup": "^1.0.0",
     "node-webcam": "^0.8.0",
-    "robotjs": "^0.6.0"
+    "robotjs": "^0.6.0",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",
@@ -28,7 +29,11 @@
     "forge": {
       "packagerConfig": {
         "icon": "hand",
-        "extraResource": ["hand.png", "hand_off.png"]
+        "extraResource": [
+          "hand.png",
+          "hand_off.png",
+          "handsserver"
+        ]
       },
       "makers": [
         {
