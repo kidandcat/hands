@@ -70,14 +70,14 @@ func handleMouseEvent(ev byte, args []byte) {
 	case cmdScroll:
 		x := 127 - int(args[0])
 		y := 127 - int(args[1])
-		robotgo.ScrollRelative(x, y)
+		robotgo.ScrollSmooth(y, 1, 1, x)
 	case cmdLeftDown:
 		robotgo.Toggle("left", "down")
 	case cmdLeftUp:
-		robotgo.Toggle("left")
+		robotgo.Toggle("left", "up")
 	case cmdRightDown:
 		robotgo.Toggle("right", "down")
 	case cmdRightUp:
-		robotgo.Toggle("right")
+		robotgo.Toggle("right", "up")
 	}
 }

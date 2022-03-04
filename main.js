@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain, Notification } = require('electron')
-const robot = require('robotjs')
 const path = require('path')
 
 const createWindow = () => {
@@ -41,7 +40,8 @@ const pinchedPinkyf = pinchedFinger(0.03)
 let scrolling = false
 let paused = false
 let pausing = false
-let scrollBuffer = 0
+let scrollBufferX = 0
+let scrollBufferY = 0
 let moveBufferX = 0
 let moveBufferY = 0
 let timerLeft, timerRight
@@ -70,10 +70,14 @@ function fingersData(event, data) {
         if (statusMouse && statusLeft && statusRight && statusPinky) {
             paused = !paused
             pausing = true
-            if (paused) app.dock.setIcon(process.resourcesPath + "/hand_off.png")
-            else app.dock.setIcon(process.resourcesPath + "/hand.png")
-            goRightUp()
+            if (paused) app.dock.setIcon( (process.env.APP_DEV ? '.' : process.resourcesPath) + "/hand_off.png")
+            else app.dock.setIcon((process.env.APP_DEV ? '.' : process.resourcesPath) + "/hand.png")
+            clearTimeout(timerLeft)
+            clearTimeout(timerRight)
+            timerLeft = null
+            timerRight = null
             goLeftUp()
+            goRightUp()
             setTimeout(() => {
                 pausing = false
             }, 1000);
@@ -141,17 +145,21 @@ function fingersData(event, data) {
         if (!scrolling && statusLeft && statusRight) {
             clearTimeout(timerLeft)
             clearTimeout(timerRight)
+            timerLeft = null
+            timerRight = null
             goLeftUp()
             goRightUp()
             scrolling = true
-            scrollBuffer = (mouseBaseSpeed * (1 - finger1.y))
+            scrollBufferY = (mouseBaseSpeed * (finger1.y))
+            scrollBufferX = (mouseBaseSpeed * (1 - finger1.x))
         }
 
         if (scrolling) {
-            const delta = scrollBuffer - (mouseBaseSpeed * (1 - finger1.y))
-            goScroll(delta * scrollMultiplier)
-            scrollBuffer = (mouseBaseSpeed * (1 - finger1.y))
-
+            const deltaY = scrollBufferY - (mouseBaseSpeed * (finger1.y))
+            const deltaX = scrollBufferX - (mouseBaseSpeed * (1 - finger1.x))
+            goScroll(deltaX * scrollMultiplier, deltaY * scrollMultiplier)
+            scrollBufferY = (mouseBaseSpeed * (finger1.y))
+            scrollBufferX = (mouseBaseSpeed * (1 - finger1.x))
             if (!statusLeft && !statusRight) {
                 scrolling = false
             }
@@ -179,7 +187,7 @@ function pinchedFinger(rate) {
 
 
 // Spawn Go server
-const pc = require('child_process').spawn(process.resourcesPath + '/handsserver', {
+const pc = require('child_process').spawn((process.env.APP_DEV ? '.' : process.resourcesPath) + '/handsserver', {
     cwd: process.cwd(),
     detached: true,
     stdio: "inherit"
